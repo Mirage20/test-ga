@@ -1,0 +1,11 @@
+name: Pull Request Alert
+on: pull_request
+jobs:
+  build:
+    name: Chat Bots
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send chat message
+      run: |
+        echo ${{ github.event.pull_request }}
+        curl -sS --output /dev/null -X POST -H 'Content-Type: application/json' "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" -d '{"text": "New Pull Request - ${{ github.event.pull_request._links.html.href }} "}' || echo "Sending PR alerts failed"
